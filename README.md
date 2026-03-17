@@ -1,5 +1,7 @@
 # ux-prototype — A Lean UX Skill for Claude
 
+[![Download .skill](https://img.shields.io/badge/Download-.skill-blue?style=for-the-badge&logo=github)](https://github.com/timeril/ux-prototype-skill/releases/download/v1.0.0/ux-prototype.skill)
+
 A Claude skill that grounds every prototype, flow, and screen design in rigorous user-centered design theory — powered by Lean UX principles and augmented by AI-specific capabilities that go beyond what a traditional human-paced UX process can do.
 
 ---
