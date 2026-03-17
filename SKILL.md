@@ -15,6 +15,7 @@ Traditional UX process is bottlenecked by human bandwidth: one researcher, one s
 - **Stress-test assumptions** by simulating how different persona types would react to a proposed flow
 - **Compress the assumption-to-artifact cycle** — move from raw context to validated design hypothesis in one session rather than weeks
 - **Act as a persistent design critic** who has read every relevant anti-pattern and will flag them without social awkwardness
+- **Generate complete state inventories** for every screen — empty, loading, error, partial, read-only, overflow, first-time — including states the designer hasn't thought to ask about
 
 The philosophy is Lean UX: small bets, explicit assumptions, fast learning cycles. We're not trying to build the perfect design upfront. We're trying to build the *right* first thing to put in front of real users as fast as possible.
 
@@ -232,6 +233,110 @@ Mobile / interrupted     | Step 4       | Loses progress
 
 This replaces the need for a full usability test at the wireframe stage — not perfectly, but enough to catch the worst problems before they get built.
 
+### 3D. Edge Case & State Inventory (Required Output)
+
+Every flow and every key screen must have a complete state inventory before it's considered designed. Undesigned states become developer guesswork and user-facing bugs.
+
+**Run this inventory for every flow and every significant screen:**
+
+#### Flow-Level Edge Cases
+
+```
+FLOW EDGE CASES: [Flow name]
+────────────────────────────────────────────────────────
+Category          | Scenario                | Design response
+────────────────────────────────────────────────────────
+Entry conditions  | User arrives mid-flow   | [How do we handle?]
+                  | from an external link   |
+────────────────────────────────────────────────────────
+Permissions       | User lacks required     | [Graceful degradation
+                  | role/access             | or clear explanation?]
+────────────────────────────────────────────────────────
+Data state        | Required data is        | [Block? Warn? Default?]
+                  | missing or stale        |
+────────────────────────────────────────────────────────
+Interruption      | User abandons mid-flow  | [Save progress?
+                  | and returns later       | Resume prompt?]
+────────────────────────────────────────────────────────
+Concurrency       | Another user/tab        | [Conflict resolution
+                  | modifies same data      | or lock strategy?]
+────────────────────────────────────────────────────────
+Failure           | Network drops mid-flow  | [Retry? Data loss?
+                  |                         | Clear feedback?]
+────────────────────────────────────────────────────────
+Completion        | User completes flow     | [Confirmation? Next
+                  | more than once          | step? Idempotent?]
+────────────────────────────────────────────────────────
+```
+
+#### Screen-Level State Inventory
+
+Every screen exists in multiple states. All must be explicitly designed — never left to engineering defaults.
+
+```
+STATE INVENTORY: [Screen name]
+────────────────────────────────────────────────
+State             | Trigger                 | Design notes
+────────────────────────────────────────────────
+Empty             | No data exists yet      | [Not just a blank
+                  |                         | screen — what action
+                  |                         | does the user take?]
+────────────────────────────────────────────────
+Loading           | Data is being fetched   | [Skeleton? Spinner?
+                  |                         | Optimistic UI?]
+────────────────────────────────────────────────
+Partial / degraded| Some data loaded,       | [Show what we have?
+                  | some failed             | Wait for all?]
+────────────────────────────────────────────────
+Error             | Request failed          | [Actionable message.
+                  |                         | What can they do?]
+────────────────────────────────────────────────
+Success           | Action completed        | [Confirmation copy.
+                  |                         | What happens next?]
+────────────────────────────────────────────────
+Read-only         | User lacks edit perms   | [Visible but locked?
+                  |                         | Hidden entirely?]
+────────────────────────────────────────────────
+Overflow          | Content exceeds         | [Truncate? Paginate?
+                  | display limits          | Scroll? Collapse?]
+────────────────────────────────────────────────
+First-time / onboarding | User has never    | [Tooltips? Guided
+                  | visited this screen     | empty state?]
+────────────────────────────────────────────────
+```
+
+#### Data Edge Cases
+
+For any screen displaying dynamic content, test the design against:
+
+- **Zero items** — empty list, no results, no history
+- **One item** — does the layout still make sense?
+- **Maximum items** — 500 results, very long lists
+- **Very long strings** — a name with 80 characters, a description with 500
+- **Missing optional fields** — what renders when a field is blank?
+- **Mixed states** — some items complete, some pending, some errored
+- **Stale data** — content that hasn't refreshed and may be out of date
+
+#### Interaction States (Component Level)
+
+For every interactive element, define:
+
+```
+INTERACTION STATES: [Component name]
+────────────────────────────────────
+Default    → what it looks like at rest
+Hover      → visual feedback on mouse-over
+Focus      → keyboard/accessibility focus indicator
+Active     → mid-click or mid-press state
+Disabled   → unavailable, and why (tooltip?)
+Loading    → async action in progress
+Success    → confirmation feedback
+Error      → validation or action failure
+────────────────────────────────────
+```
+
+**AI advantage:** Claude should proactively generate the full state inventory for any screen described, including states the user hasn't thought to ask about. Undocumented states are the most common cause of design-to-development gaps. Surface them all before handoff.
+
 ---
 
 ## Step 4: Screen Design Standards
@@ -316,6 +421,10 @@ Confirm these before closing a design session:
 - [ ] Conceptual model statement written
 - [ ] Each flow preceded by a scenario narrative
 - [ ] Flow stress test run against at least 3 persona variants
+- [ ] Flow edge case inventory completed (permissions, interruption, failure, concurrency)
+- [ ] State inventory completed for every key screen (empty, loading, error, success, read-only, overflow, first-time)
+- [ ] Data edge cases checked (zero, one, max, long strings, missing fields)
+- [ ] Interaction states defined for all interactive components
 - [ ] Each key screen annotated with persona, micro-goal, primary action, cognitive load
 - [ ] Anti-pattern sweep completed
 - [ ] Design hypothesis written with testable success/failure signals
