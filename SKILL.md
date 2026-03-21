@@ -387,9 +387,74 @@ This is the artifact that should go into the next user session — not a polishe
 
 ---
 
+## Step 6: Prototype Feature Walkthrough (Required Output)
+
+After any prototype, flow, or set of screens is produced, Claude must generate a structured walkthrough of everything that was designed. This serves as a handoff document, a review artifact, and a record of design intent.
+
+The walkthrough is written from the **user's perspective**, not the system's. It describes what the user experiences, not what the UI renders.
+
+**Output format:**
+
+```
+PROTOTYPE WALKTHROUGH: [Prototype / Feature name]
+Persona: [Who this is designed for]
+Core JTBD: [The job this prototype addresses]
+────────────────────────────────────────────────
+
+FEATURES INCLUDED
+─────────────────
+
+[Feature 1 name]
+  What it does:    [One sentence from the user's POV]
+  Why it's there:  [Which goal or JTBD it serves]
+  Key interactions:[What the user does and what happens]
+  States covered:  [List the states designed for this feature]
+  Edge cases:      [What non-happy-path scenarios are handled]
+  Not included:    [Anything explicitly descoped and why]
+
+[Feature 2 name]
+  What it does:    ...
+  Why it's there:  ...
+  Key interactions:...
+  States covered:  ...
+  Edge cases:      ...
+  Not included:    ...
+
+[Repeat for each feature]
+
+────────────────────────────────────────────────
+WHAT THIS PROTOTYPE IS DESIGNED TO TEST
+  Primary assumption: [The riskiest belief being tested]
+  Success signal:     [What we'd observe if it works]
+  Failure signal:     [What we'd observe if it doesn't]
+
+WHAT'S INTENTIONALLY OUT OF SCOPE
+  [Feature or state] — [Reason: too early / low priority /
+  separate flow / needs more research]
+
+OPEN QUESTIONS
+  [Any design decisions that were made with low confidence
+  and should be flagged for user testing or team review]
+────────────────────────────────────────────────
+```
+
+**Rules for the walkthrough:**
+
+- Every feature in the prototype must appear in the walkthrough — no silent inclusions
+- Every deliberate exclusion must be named — "we didn't design X because Y" prevents it from being treated as an oversight
+- Open questions must be honest — if a design decision was a coin flip, say so
+- States covered must match the state inventory from Step 3D — if a state was identified but not designed, flag it as out of scope with a reason, not silently omitted
+- Language must be plain — a PM, engineer, or stakeholder with no design background should be able to read the walkthrough and understand exactly what was built and why
+
+**AI advantage:** Claude should cross-reference the walkthrough against the assumption map and JTBD statement to verify every feature traces back to a declared user need. Any feature that can't be traced is a candidate for removal.
+
+---
+
 ## AI-Specific Superpowers — Use These Proactively
 
 Beyond standard UX process, Claude should proactively apply these capabilities without being asked:
+
+**Walkthrough traceability check**: After generating the prototype walkthrough, cross-reference every feature against the assumption map and JTBD statements. Any feature that can't be traced to a declared user need should be flagged as a candidate for removal.
 
 **Parallel hypothesis generation**: When a design decision is ambiguous, generate 2-3 competing approaches and do an immediate comparative critique. Don't pick one without surfacing the trade-offs.
 
@@ -429,3 +494,4 @@ Confirm these before closing a design session:
 - [ ] Anti-pattern sweep completed
 - [ ] Design hypothesis written with testable success/failure signals
 - [ ] Riskiest assumption identified and minimum prototype fidelity stated
+- [ ] Prototype walkthrough produced — all features documented with rationale, states, edge cases, exclusions, and open questions
